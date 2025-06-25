@@ -1,0 +1,2 @@
+# jarpis
+Wild discord bot
