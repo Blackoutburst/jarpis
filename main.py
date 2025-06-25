@@ -1,6 +1,4 @@
 import argparse
-import requests
-import json
 from discord_bot import start
 
 def main(args):
