@@ -1,10 +1,10 @@
-import argparse
-
+import requests
+import json
 from discord_bot import start
 
-
 def main(args):
-    start(args.token)
+    discord_token = args.token
+    start()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
