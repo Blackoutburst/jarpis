@@ -5,7 +5,7 @@ from discord_bot import start
 
 def main(args):
     discord_token = args.token
-    start()
+    start(discord_token)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
