@@ -1,5 +1,6 @@
 import discord
 from llm import clear_memory, update_prompt, add_message, request_message
+from imagen import generate_image
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -29,6 +30,12 @@ async def on_message(message):
         update_prompt(message.content[1:].strip())
         await message.channel.send("Prompt updated")
 
+    if message.content.startswith('.'):
+        filename = generate_image(message.content[1:].strip())
+        with open(filename, 'rb') as f:
+            picture = discord.File(f)
+        await message.channel.send(file=picture)
+        
     if message.content.startswith('!'):
         user_input = message.content[1:].strip()
 
