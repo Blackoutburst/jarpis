@@ -4,6 +4,7 @@ diffusers
 torch
 transformers
 accelerate
+datasets[audio]
 protobuf
 sentencepiece
 easyocr
