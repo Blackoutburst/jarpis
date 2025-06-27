@@ -24,8 +24,8 @@ def generate_image(prompt):
         negative_prompt=negative_prompt,
         width=832,
         height=1216,
-        guidance_scale=5,
-        num_inference_steps=28
+        guidance_scale=7,
+        num_inference_steps=25
     ).images[0]
     
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")

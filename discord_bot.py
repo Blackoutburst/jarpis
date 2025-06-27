@@ -1,6 +1,7 @@
 import discord
 from llm import clear_memory, update_prompt, add_message, request_message
 from imagen import generate_image
+from image_reader import read_image
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -39,11 +40,28 @@ async def on_message(message):
     if message.content.startswith('!'):
         user_input = message.content[1:].strip()
 
-        add_message({"role": "user", "content": f"[{message.author.display_name}]: {user_input}"})
+        image_descriptions = []
+
+        for attachment in message.attachments:
+            if attachment.content_type and attachment.content_type.startswith("image/"):
+                image_path = f"/tmp/{attachment.filename}"
+                await attachment.save(image_path)
+
+                image_info = read_image(image_path)
+                image_descriptions.append(image_info)
+
+        image_summary = "\n".join(image_descriptions)
+        full_message = f"[{message.author.display_name}]: {user_input}"
+        
+        if image_summary:
+            full_message += f"\n\nAttached image(s) info:\n{image_summary}"
+
+        add_message({"role": "user", "content": full_message})
 
         llm_answer = request_message()
         
-        await message.channel.send(llm_answer)
+        for i in range(0, len(llm_answer), 2000):
+            await message.channel.send(llm_answer[i:i+2000])
 
        
 
