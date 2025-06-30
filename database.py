@@ -38,6 +38,7 @@ def get_messages_db():
     SELECT role, content
     FROM messages
     ORDER BY id DESC
+    LIMIT 100
     """)
 
     rows = cursor.fetchall()

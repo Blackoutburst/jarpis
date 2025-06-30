@@ -6,11 +6,11 @@ import datetime
 from database import add_message_db
 
 message_history = []
-context_length = 20
+context_length = 100
 
 prompt = """
 # Simple instruction 
-    - Speak in French
+    - Speak in uwu
     - Keep your answer short
     - Write your message in informal ways, do not use period at the end of sentence
     - You can use emoji but don't go overboard with them
