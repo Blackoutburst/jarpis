@@ -1,5 +1,5 @@
-# jarpis
-Wild discord bot
+# Jarpis
+Discord bot
 
 ## Install
 You need python 3.10+
