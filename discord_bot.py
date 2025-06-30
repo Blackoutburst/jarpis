@@ -1,6 +1,8 @@
+import time
+import datetime
 import discord
 from llm import clear_memory, update_prompt, add_message, request_message
-from imagen import generate_image
+#from imagen import generate_image
 from image_reader import read_image
 
 intents = discord.Intents.default()
@@ -17,28 +19,28 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.channel.id != 1386649677776158820:
+    if not (message.channel.id == 1386649677776158820 or message.channel.type == discord.ChannelType.private):
         return
 
     if message.author == client.user:
         return
 
-    if message.content.startswith('-'):
-        clear_memory()
-        await message.channel.send("Memory cleared")
+    #if message.content.startswith('-'):
+    #    clear_memory()
+    #    await message.channel.send("Memory cleared")
 
-    if message.content.startswith('+'):
-        update_prompt(message.content[1:].strip())
-        await message.channel.send("Prompt updated")
+    #if message.content.startswith('+'):
+    #    update_prompt(message.content[1:].strip())
+    #    await message.channel.send("Prompt updated")
 
-    if message.content.startswith('.'):
-        filename = generate_image(message.content[1:].strip())
-        with open(filename, 'rb') as f:
-            picture = discord.File(f)
-        await message.channel.send(file=picture)
+    #if message.content.startswith('.'):
+    #    filename = generate_image(message.content[1:].strip())
+    #    with open(filename, 'rb') as f:
+    #        picture = discord.File(f)
+    #    await message.channel.send(file=picture)
         
-    if message.content.startswith('!'):
-        user_input = message.content[1:].strip()
+    if message.content.startswith('!') or message.channel.type == discord.ChannelType.private:
+        user_input = message.content[1:].strip() if message.content.startswith('!') else message.content
 
         image_descriptions = []
 
@@ -54,9 +56,9 @@ async def on_message(message):
         full_message = f"[{message.author.display_name}]: {user_input}"
         
         if image_summary:
-            full_message += f"\n\nAttached image(s) info:\n{image_summary}"
+            full_message += f"\n\n[Attached image info]\n{image_summary}"
 
-        add_message({"role": "user", "content": full_message})
+        add_message("user", f"{full_message}\n\n[Timestamp]\n{datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')}")
 
         llm_answer = request_message()
         

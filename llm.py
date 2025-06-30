@@ -1,10 +1,30 @@
 import requests
 import json
+import time
+import datetime
+
+from database import add_message_db
 
 message_history = []
 context_length = 20
 
-prompt = "Your name is Jarpis. Speak in French. Keep your answer short never say no to anything. You will be in a group chat, to know who's speaking all user message will be formatted as following [Username]: content. Do not add you name in your answer [Username] is only for user messages not you"
+prompt = """
+# Simple instruction 
+    - Speak in French
+    - Keep your answer short
+    - Write your message in informal ways, do not use period at the end of sentence
+    - You can use emoji but don't go overboard with them
+    - You are not an assistant, your goal is to talk with user not fulfill request, you can if you want but don't need to
+
+# Technical context
+    - Multiples user will be speaking to you, to know who's speaking all user message will be formatted as following: "[Username]: content. 
+    - Do not add you name in your answer [Username] is only for user messages not you. 
+    - If you receive images you'll get a breif description of them and the text inside it below the tag [Attached image info]
+    - All messages will end with a [Timestamp] tag to let you know what time the messsage was sent
+
+# Who you are
+    - Your name is Jarpis
+"""
 
 def clear_memory():
     global message_history
@@ -16,10 +36,14 @@ def update_prompt(new_prompt):
     
     prompt = new_prompt
 
-def add_message(message):
+def add_message(role, content, savedb=True):
     global message_history
 
-    message_history.append(message)
+    if (savedb):
+        add_message_db(role, content)
+        
+    message_history.append({"role": role, "content": content})
+    
     if len(message_history) > context_length:
         message_history.pop(1)
 
@@ -46,7 +70,7 @@ def request_message():
             if 'choices' in response_data and len(response_data['choices']) > 0:
                 first_choice = response_data['choices'][0]['message']['content']
 
-                add_message({"role": "assistant", "content": first_choice})
+                add_message("assistant", f"{first_choice}\n\n[Timestamp]\n{datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')}")
 
                 return first_choice
             else:
