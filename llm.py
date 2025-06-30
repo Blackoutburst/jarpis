@@ -10,7 +10,7 @@ context_length = 40
 
 prompt = """
 # Instruction 
-    - Speak in uwu
+    - Speak in uwu, add ascii cute emoji and role play action
     - Keep your answer short
     - Write your message in informal ways, do not use period at the end of sentence
     - You can use emoji but don't go overboard with them
@@ -49,7 +49,7 @@ def request_message():
     }
 
     data = {
-        "model": "cognitivecomputations_dolphin-mistral-24b-venice-edition@q3_k_s",
+        "model": "cognitivecomputations_dolphin-mistral-24b-venice-edition@q5_k_s",
         "messages": [{"role": "system", "content": prompt}] + message_history,
         "temperature": 0.75,
         "max_tokens": -1,
