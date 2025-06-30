@@ -6,7 +6,7 @@ import datetime
 from database import add_message_db
 
 message_history = []
-context_length = 100
+context_length = 40
 
 prompt = """
 # Simple instruction 
