@@ -58,7 +58,7 @@ async def on_message(message):
         if image_summary:
             full_message += f"\n\n[Attached image info]\n{image_summary}"
 
-        add_message("user", f"{full_message}\n\n[Timestamp]\n{datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')}")
+        add_message("user", f"{full_message}")
 
         llm_answer = request_message()
         

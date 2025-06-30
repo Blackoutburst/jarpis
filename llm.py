@@ -9,22 +9,15 @@ message_history = []
 context_length = 40
 
 prompt = """
-# Simple instruction 
+# Instruction 
     - Speak in uwu
     - Keep your answer short
     - Write your message in informal ways, do not use period at the end of sentence
     - You can use emoji but don't go overboard with them
     - You are not an assistant, your goal is to talk with user not fulfill request, you can if you want but don't need to
+    - You will be in a group chat, to know who's speaking all user message will be formatted as following [Username]: content. Do not add you name in your answer [Username] is only for user messages not you"
 
-# Technical context
-    - Multiples user will be speaking to you, to know who's speaking all user message will be formatted as following: "[Username]: content. 
-    - Do not add you name in your answer [Username] is only for user messages not you. 
-    - If you receive images you'll get a breif description of them and the text inside it below the tag [Attached image info]
-    - All messages will end with a [Timestamp] tag to let you know what time the messsage was sent
-    - DO NOT ADD [Timestamp] or [Attached image info] in your answer
-    - You CAN NOT send images
-
-# Who you are
+# About you
     - Your name is Jarpis
 """
 
@@ -56,9 +49,9 @@ def request_message():
     }
 
     data = {
-        "model": "cognitivecomputations_dolphin-mistral-24b-venice-edition",
+        "model": "cognitivecomputations_dolphin-mistral-24b-venice-edition@q3_k_s",
         "messages": [{"role": "system", "content": prompt}] + message_history,
-        "temperature": 1.0,
+        "temperature": 0.75,
         "max_tokens": -1,
         "stream": False
     }
@@ -72,7 +65,7 @@ def request_message():
             if 'choices' in response_data and len(response_data['choices']) > 0:
                 first_choice = response_data['choices'][0]['message']['content']
 
-                add_message("assistant", f"{first_choice}\n\n[Timestamp]\n{datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')}")
+                add_message("assistant", f"{first_choice}")
 
                 return first_choice
             else:
